@@ -48,25 +48,6 @@ function toCommandValue(input) {
     }
     return JSON.stringify(input);
 }
-/**
- *
- * @param annotationProperties
- * @returns The command properties to send with the actual annotation command
- * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
- */
-function toCommandProperties(annotationProperties) {
-    if (!Object.keys(annotationProperties).length) {
-        return {};
-    }
-    return {
-        title: annotationProperties.title,
-        file: annotationProperties.file,
-        line: annotationProperties.startLine,
-        endLine: annotationProperties.endLine,
-        col: annotationProperties.startColumn,
-        endColumn: annotationProperties.endColumn
-    };
-}
 
 /**
  * Issues a command to the GitHub Actions runner
@@ -27952,19 +27933,6 @@ var ExitCode;
     ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
 /**
- * Gets the value of an input.
- * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
- * Returns an empty string if the value is not defined.
- *
- * @param     name     name of the input to get
- * @param     options  optional. See InputOptions.
- * @returns   string
- */
-function getInput(name, options) {
-    const val = process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '';
-    return val.trim();
-}
-/**
  * Sets the value of an output.
  *
  * @param     name     name of the output to set
@@ -27979,46 +27947,12 @@ function setOutput(name, value) {
     process.stdout.write(os.EOL);
     issueCommand('set-output', { name }, toCommandValue(value));
 }
-//-----------------------------------------------------------------------
-// Results
-//-----------------------------------------------------------------------
 /**
- * Sets the action status to failed.
- * When the action exits it will be with an exit code of 1
- * @param message add error issue message
+ * Writes info to log with console.log.
+ * @param message info message
  */
-function setFailed(message) {
-    process.exitCode = ExitCode.Failure;
-    error(message);
-}
-/**
- * Writes debug message to user log
- * @param message debug message
- */
-function debug(message) {
-    issueCommand('debug', {}, message);
-}
-/**
- * Adds an error issue
- * @param message error issue message. Errors will be converted to string via toString()
- * @param properties optional properties to add to the annotation.
- */
-function error(message, properties = {}) {
-    issueCommand('error', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
-}
-
-/**
- * Waits for a number of milliseconds.
- *
- * @param milliseconds The number of milliseconds to wait.
- * @returns Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-    return new Promise((resolve) => {
-        if (isNaN(milliseconds))
-            throw new Error('milliseconds is not a number');
-        setTimeout(() => resolve('done!'), milliseconds);
-    });
+function info(message) {
+    process.stdout.write(message + os.EOL);
 }
 
 /**
@@ -28026,23 +27960,9 @@ async function wait(milliseconds) {
  *
  * @returns Resolves when the action is complete.
  */
-async function run() {
-    try {
-        const ms = getInput('milliseconds');
-        // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        debug(`Waiting ${ms} milliseconds ...`);
-        // Log the current timestamp, wait, then log the new timestamp
-        debug(new Date().toTimeString());
-        await wait(parseInt(ms, 10));
-        debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        setOutput('time', new Date().toTimeString());
-    }
-    catch (error) {
-        // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            setFailed(error.message);
-    }
+async function hello() {
+    info('Hello from my custom action :)');
+    setOutput('greeting', "i'm practicing typescript actions");
 }
 
 /**
@@ -28050,5 +27970,5 @@ async function run() {
  * main logic.
  */
 /* istanbul ignore next */
-run();
+hello();
 //# sourceMappingURL=index.js.map

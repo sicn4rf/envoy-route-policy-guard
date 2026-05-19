@@ -7,5 +7,5 @@ import * as core from '@actions/core'
 
 export async function hello(): Promise<void> {
   core.info('Hello from my custom action :)')
-  core.setOutput('greeting', 'i\'m practicing typescript actions')
+  core.setOutput('greeting', "i'm practicing typescript actions")
 }
