@@ -45,8 +45,8 @@ jobs:
       #   id: npm-ci-test
       #   run: npm run ci-test
 
-  test-action:
-    name: GitHub Actions Test
+  test-security-policy-guard:
+    name: Security Policy Guard Test
     runs-on: ubuntu-latest
 
     steps:
