@@ -1,11 +1,11 @@
-name: The name of your action here
-description: Provide a description here
-author: Your name or organization here
+name: Security Policy Guard Test
+description: Check if there are any HTTPRoutes without security policies
+author: francis-padua
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: heart
-  color: red
+  icon: terminal
+  color: green
 
 # Define your inputs here.
 inputs:
