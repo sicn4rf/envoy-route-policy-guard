@@ -1,27 +1,41 @@
 import * as core from '@actions/core'
-import { wait } from './wait.js'
+import * as github from '@actions/github'
+import { parseHTTPRoutes, parseSecurityPolicies } from './parse.ts'
+import { HTTPRoute, SecurityPolicy } from './types.ts'
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 
-/**
- * The main function for the action.
- *
- * @returns Resolves when the action is complete.
- */
-export async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
+export async function checkSecurityPolicyGuard(): Promise<void> {
+  const context = github.context
+  const token = process.env.GITHUB_TOKEN
+  const client = github.getOctokit(token)
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+  const response = await client.rest.pulls.listFiles({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    pull_number: context.payload.pull_request?.number
+  })
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+  const files = response.data.map( (file) => file.filename )
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+  let httpRoutes = []
+  let securityPolicies = []
+  
+  for (const file of files) {
+    if (file.endsWith('.yaml')) {
+      const fileContent = fs.readFileSync(file, 'utf8')
+      const data = yaml.parse(fileContent)
+
+      if (data.kind === 'HTTPRoute') {
+        httpRoutes.push(file)
+      }
+      if (data.kind === 'SecurityPolicy') {
+        securityPolicies.push(file)
+      }
+    }
   }
+
+  let unmatchedRoutes = []
+
+
 }
