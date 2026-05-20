@@ -9,8 +9,10 @@ branding:
 
 # Define your outputs here.
 outputs:
-  time:
-    description: Your output description here
+  unmatched_routes:
+    description: List of HTTPRoutes without security policies
+    required: true
+    permissions: read
 
 runs:
   using: node24
