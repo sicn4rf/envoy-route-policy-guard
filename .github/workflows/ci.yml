@@ -54,12 +54,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v6
 
-      - name: Test Local Action
-        id: test-action
+      - name: Check Security Policy Guard
+        id: check-security-policy
         uses: ./
-        with:
-          milliseconds: 2000
 
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+      - name: List of HTTPRoutes without security policies
+        id: list-unmatched-routes
+        run: echo "${{ steps.check-security-policy.outputs.unmatched_routes }}"
