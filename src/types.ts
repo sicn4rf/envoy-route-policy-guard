@@ -12,8 +12,8 @@ export interface SecurityPolicy{
     metadata: {
         name: string
     }
-    targetRefs: [{
+    targetRefs: {
         kind: string
         name: string
-    }]
+    }[]
 }
