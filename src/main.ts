@@ -18,8 +18,8 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
 
   const files = response.data.map( (file) => file.filename )
 
-  let httpRoutes = []
-  let securityPolicies = []
+  let httpRoutes: HTTPRoute[]= []
+  let securityPolicies: SecurityPolicy[] = []
   
   for (const file of files) {
     if (file.endsWith('.yaml')) {
@@ -27,15 +27,31 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
       const data = yaml.parse(fileContent)
 
       if (data.kind === 'HTTPRoute') {
-        httpRoutes.push(file)
+        httpRoutes.push({
+          filename: data.filename,
+          kind: data.kind,
+          metadata: {
+            name: data.metadata.name
+          }
+        } as HTTPRoute)
       }
       if (data.kind === 'SecurityPolicy') {
-        securityPolicies.push(file)
+        securityPolicies.push({
+          filename: data.filename,
+          kind: data.kind,
+          metadata: {
+            name: data.metadata.name
+          },
+          targetRefs: data.targetRefs.map( (ref) => ({
+            kind: ref.kind,
+            name: ref.name
+          }))
+        } as SecurityPolicy)
       }
     }
   }
 
-  let unmatchedRoutes = []
+  let unmatchedRoutes: HTTPRoute[] = []
 
 
 }
