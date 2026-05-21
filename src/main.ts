@@ -6,7 +6,6 @@ import { parseHTTPRoute, parseSecurityPolicy } from './parse.js'
 import { matchRoutes } from './match.js'
 import { HTTPRoute, SecurityPolicy } from './types.js'
 
-
 export async function checkSecurityPolicyGuard(): Promise<void> {
   try {
     core.info('Checking security policy guard...')
@@ -37,11 +36,11 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
       pull_number: prNumber
     })
 
-    const files = response.data.map( (file) => file.filename )
+    const files = response.data.map((file) => file.filename)
 
-    const httpRoutes: HTTPRoute[]= []
+    const httpRoutes: HTTPRoute[] = []
     const securityPolicies: SecurityPolicy[] = []
-    
+
     core.info('Parsing yaml files')
     for (const file of files) {
       if (file.endsWith('.yaml')) {
@@ -61,16 +60,24 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
     }
 
     core.info('Matching routes and policies')
-    const unmatchedRoutes: HTTPRoute[] = matchRoutes(httpRoutes, securityPolicies)
+    const unmatchedRoutes: HTTPRoute[] = matchRoutes(
+      httpRoutes,
+      securityPolicies
+    )
 
     if (unmatchedRoutes.length > 0) {
-      core.setOutput('unmatched_routes', unmatchedRoutes.map(route => route.filename).join(', '))
+      core.setOutput(
+        'unmatched_routes',
+        unmatchedRoutes.map((route) => route.filename).join(', ')
+      )
       core.setFailed('Some HTTPRoutes are not matched with any SecurityPolicy')
-    }
-    else {
-      core.setOutput('unmatched_routes', 'All HTTPRoutes are matched with SecurityPolicies')
+    } else {
+      core.setOutput(
+        'unmatched_routes',
+        'All HTTPRoutes are matched with SecurityPolicies'
+      )
     }
   } catch (error) {
-    core.setFailed(error instanceof Error ? error.message: String(error))
+    core.setFailed(error instanceof Error ? error.message : String(error))
   }
 }
