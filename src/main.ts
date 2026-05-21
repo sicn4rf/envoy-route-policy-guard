@@ -49,11 +49,11 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
         core.info('Parsing ${file}...')
         if (data.kind === 'HTTPRoute') {
           core.info('${file} is HTTPRoute')
-          httpRoutes.push(parseHTTPRoute(data, data.filename))
+          httpRoutes.push(parseHTTPRoute(data, file))
         }
         if (data.kind === 'SecurityPolicy') {
           core.info('${file} is SecurityPolicy')
-          securityPolicies.push(parseSecurityPolicy(data, data.filename))
+          securityPolicies.push(parseSecurityPolicy(data, file))
         }
       }
     }
