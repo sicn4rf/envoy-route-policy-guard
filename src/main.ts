@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { parseHTTPRoutes, parseSecurityPolicies } from './parse.ts'
+import { matchRoutes } from './match.ts'
 import { HTTPRoute, SecurityPolicy } from './types.ts'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
