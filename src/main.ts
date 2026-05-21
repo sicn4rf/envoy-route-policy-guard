@@ -4,7 +4,7 @@ import { parseHTTPRoute, parseSecurityPolicy } from './parse.js'
 import { matchRoutes } from './match.js'
 import { HTTPRoute, SecurityPolicy } from './types.js'
 import * as fs from 'fs'
-import * as yaml from 'js-yaml'
+import * as yaml from 'yaml'
 
 export async function checkSecurityPolicyGuard(): Promise<void> {
   const context = github.context
