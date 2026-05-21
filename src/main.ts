@@ -46,13 +46,13 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
         const fileContent = fs.readFileSync(file, 'utf8')
         const data = yaml.parse(fileContent)
 
-        core.info('Parsing ${file}...')
+        core.info(`Parsing ${file}...`)
         if (data.kind === 'HTTPRoute') {
-          core.info('${file} is HTTPRoute')
+          core.info(`${file} is HTTPRoute`)
           httpRoutes.push(parseHTTPRoute(data, file))
         }
         if (data.kind === 'SecurityPolicy') {
-          core.info('${file} is SecurityPolicy')
+          core.info(`${file} is SecurityPolicy`)
           securityPolicies.push(parseSecurityPolicy(data, file))
         }
       }
