@@ -20,7 +20,9 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
       core.error('GITHUB_TOKEN is not set')
       throw new Error('GITHUB_TOKEN is not set')
     }
-    if (!context.payload.pull_request?.number) {
+
+    const prNumber = context.payload.pull_request?.number
+    if (!prNumber || prNumber === undefined) {
       core.error('Pull request number is not set')
       throw new Error('Pull request number is not set')
     }
@@ -32,7 +34,7 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
     const response = await client.rest.pulls.listFiles({
       owner: context.repo.owner,
       repo: context.repo.repo,
-      pull_number: context.payload.pull_request?.number
+      pull_number: prNumber
     })
 
     const files = response.data.map( (file) => file.filename )
