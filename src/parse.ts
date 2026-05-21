@@ -17,7 +17,7 @@ export function parseSecurityPolicy(data: any, filename: string): SecurityPolicy
         metadata: {
             name: data.metadata.name
         },
-        targetRefs: data.targetRefs.map((ref: any) => {
+        targetRefs: data.spec.targetRefs.map((ref: any) => {
             return {
             name: ref.name,
             kind: ref.kind
