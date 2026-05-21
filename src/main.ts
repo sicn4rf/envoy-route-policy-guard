@@ -65,6 +65,9 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
       core.setOutput('unmatched_routes', unmatchedRoutes.map(route => route.filename).join(', '))
       core.setFailed('Some HTTPRoutes are not matched with any SecurityPolicy')
     }
+    else {
+      core.setOutput('unmatched_routes', 'All HTTPRoutes are matched with SecurityPolicies')
+    }
   } catch (error) {
     core.setFailed(error instanceof Error ? error.message: String(error))
   }
