@@ -12,13 +12,11 @@ inputs:
     description: GitHub token to use for API requests
     required: true
     default: ${{ secrets.GITHUB_TOKEN }}
-    
+
 # Define your outputs here.
 outputs:
   unmatched_routes:
     description: List of HTTPRoutes without security policies
-    required: true
-    permissions: read
 
 runs:
   using: node24
