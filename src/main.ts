@@ -43,7 +43,7 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
 
     core.info('Parsing yaml files')
     for (const file of files) {
-      if (file.endsWith('.yaml')) {
+      if (file.endsWith('.yaml') || file.endsWith('.yml')) {
         const fileContent = fs.readFileSync(file, 'utf8')
         const data = yaml.parse(fileContent)
 
