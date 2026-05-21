@@ -5,14 +5,14 @@ metadata:
   namespace: httpbin
 spec:
   parentRefs:
-  - name: my-gateway
-    namespace: kgateway-system
-    sectionName: http
+    - name: my-gateway
+      namespace: kgateway-system
+      sectionName: http
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /status/200
-    backendRefs:
-    - name: httpbin
-      port: 8000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /status/200
+      backendRefs:
+        - name: httpbin
+          port: 8000
