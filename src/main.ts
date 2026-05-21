@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { parseHTTPRoutes, parseSecurityPolicies } from './parse.ts'
-import { matchRoutes } from './match.ts'
-import { HTTPRoute, SecurityPolicy } from './types.ts'
+import { parseHTTPRoute, parseSecurityPolicy } from './parse.js'
+import { matchRoutes } from './match.js'
+import { HTTPRoute, SecurityPolicy } from './types.js'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 
@@ -28,26 +28,10 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
       const data = yaml.parse(fileContent)
 
       if (data.kind === 'HTTPRoute') {
-        httpRoutes.push({
-          filename: data.filename,
-          kind: data.kind,
-          metadata: {
-            name: data.metadata.name
-          }
-        } as HTTPRoute)
+        httpRoutes.push(parseHTTPRoute(data, data.filename))
       }
       if (data.kind === 'SecurityPolicy') {
-        securityPolicies.push({
-          filename: data.filename,
-          kind: data.kind,
-          metadata: {
-            name: data.metadata.name
-          },
-          targetRefs: data.targetRefs.map( (ref) => ({
-            kind: ref.kind,
-            name: ref.name
-          }))
-        } as SecurityPolicy)
+        securityPolicies.push(parseSecurityPolicy(data, data.filename))
       }
     }
   }
