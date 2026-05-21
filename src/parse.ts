@@ -1,6 +1,6 @@
 import { HTTPRoute, SecurityPolicy } from './types.js'
 
-export function parseHTTPRoutes(data: any, filename: string): HTTPRoute {
+export function parseHTTPRoute(data: any, filename: string): HTTPRoute {
     return {
         filename: filename,
         kind: data.kind,
