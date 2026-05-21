@@ -1,7 +1,7 @@
 import { HTTPRoute, SecurityPolicy } from './types.js'
 
 export function matchRoutes(httpRoutes: HTTPRoute[], securityPolicies: SecurityPolicy[]): HTTPRoute[] {
-    let unmatchedRoutes: HTTPRoute[] = []
+    const unmatchedRoutes: HTTPRoute[] = []
 
     for (const route of httpRoutes) {
         if (!securityPolicies.some(

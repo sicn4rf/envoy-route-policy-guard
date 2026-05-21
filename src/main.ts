@@ -37,8 +37,8 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
 
     const files = response.data.map( (file) => file.filename )
 
-    let httpRoutes: HTTPRoute[]= []
-    let securityPolicies: SecurityPolicy[] = []
+    const httpRoutes: HTTPRoute[]= []
+    const securityPolicies: SecurityPolicy[] = []
     
     core.info('Parsing yaml files')
     for (const file of files) {
@@ -59,7 +59,7 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
     }
 
     core.info('Matching routes and policies')
-    let unmatchedRoutes: HTTPRoute[] = matchRoutes(httpRoutes, securityPolicies)
+    const unmatchedRoutes: HTTPRoute[] = matchRoutes(httpRoutes, securityPolicies)
 
     if (unmatchedRoutes.length > 0) {
       core.setOutput('unmatched_routes', unmatchedRoutes.map(route => route.filename).join(', '))
