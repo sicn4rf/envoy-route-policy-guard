@@ -51,7 +51,8 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
     }
   }
 
-  let unmatchedRoutes: HTTPRoute[] = []
-
-
+  let unmatchedRoutes: HTTPRoute[] = matchRoutes(httpRoutes, securityPolicies)
+  if (unmatchedRoutes.length > 0) {
+    core.setOutput('unmatched_routes', unmatchedRoutes.map(route => route.filename).join(', '))
+  }
 }
