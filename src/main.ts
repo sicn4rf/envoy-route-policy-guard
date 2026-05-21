@@ -1,14 +1,23 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import * as fs from 'fs'
+import * as yaml from 'yaml'
 import { parseHTTPRoute, parseSecurityPolicy } from './parse.js'
 import { matchRoutes } from './match.js'
 import { HTTPRoute, SecurityPolicy } from './types.js'
-import * as fs from 'fs'
-import * as yaml from 'yaml'
+
 
 export async function checkSecurityPolicyGuard(): Promise<void> {
   const context = github.context
   const token = process.env.GITHUB_TOKEN
+
+  if (!token) {
+    throw new Error('GITHUB_TOKEN is not set')
+  }
+  if (!context.payload.pull_request?.number) {
+    throw new Error('Pull request number is not set')
+  }
+
   const client = github.getOctokit(token)
 
   const response = await client.rest.pulls.listFiles({
