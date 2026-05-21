@@ -13,7 +13,7 @@ export async function checkSecurityPolicyGuard(): Promise<void> {
 
     core.info('Getting context and token')
     const context = github.context
-    const token = process.env.GITHUB_TOKEN
+    const token = core.getInput('github-token', { required: true })
 
     core.info('Checking if token and pull request number are set')
     if (!token) {

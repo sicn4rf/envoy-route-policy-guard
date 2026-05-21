@@ -7,6 +7,12 @@ branding:
   icon: terminal
   color: green
 
+inputs:
+  github-token:
+    description: GitHub token to use for API requests
+    required: true
+    default: ${{ secrets.GITHUB_TOKEN }}
+    
 # Define your outputs here.
 outputs:
   unmatched_routes:
